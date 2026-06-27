@@ -1,0 +1,638 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>Para Taiane 💕</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap');
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --rose: #e8637a;
+    --rose-light: #f9d0d8;
+    --rose-dark: #b03050;
+    --cream: #fff8f9;
+    --navy: #1a1a2e;
+    --gold: #f7c948;
+    /* iOS safe area insets */
+    --sat: env(safe-area-inset-top, 0px);
+    --sab: env(safe-area-inset-bottom, 0px);
+    --sal: env(safe-area-inset-left, 0px);
+    --sar: env(safe-area-inset-right, 0px);
+  }
+
+  html, body {
+    width: 100%; height: 100%;
+    /* iOS fix: prevent elastic overscroll */
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--navy);
+    color: var(--cream);
+    /* Use dvh (dynamic viewport height) for iOS Safari with toolbar */
+    min-height: 100dvh;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Prevent iOS text size adjustment */
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  /* ---- STARS ---- */
+  #stars { position: fixed; inset: 0; pointer-events: none; z-index: 0; }
+  .star {
+    position: absolute; border-radius: 50%; background: white;
+    animation: twinkle var(--d, 3s) ease-in-out infinite var(--delay, 0s);
+  }
+  @keyframes twinkle {
+    0%,100% { opacity:.2; transform:scale(1); }
+    50%      { opacity:1;  transform:scale(1.3); }
+  }
+
+  /* ---- BACK BUTTON ---- */
+  #btn-back {
+    position: fixed;
+    /* Respect iOS notch/status bar */
+    top: calc(20px + var(--sat));
+    left: calc(20px + var(--sal));
+    z-index: 20;
+    background: transparent;
+    border: none;
+    color: #6a4858;
+    font-size: 0.8rem;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-align-items: center;
+    align-items: center;
+    gap: 5px;
+    padding: 10px 14px; /* larger tap target for iOS */
+    border-radius: 20px;
+    -webkit-transition: color 0.2s, background 0.2s;
+    transition: color 0.2s, background 0.2s;
+    opacity: 0;
+    pointer-events: none;
+    /* Prevent text selection on tap */
+    -webkit-user-select: none;
+    user-select: none;
+  }
+  #btn-back.visible { opacity: 1; pointer-events: all; }
+  #btn-back:active { color: var(--rose-light); background: rgba(232,99,122,0.15); }
+  #btn-back svg { width:14px; height:14px; fill:currentColor; }
+
+  /* ---- SCENES ---- */
+  .scene {
+    position: fixed; inset: 0;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: column;
+    flex-direction: column;
+    -webkit-align-items: center;
+    align-items: center;
+    -webkit-justify-content: center;
+    justify-content: center;
+    /* Account for safe areas + progress dots at bottom */
+    padding: calc(3.5rem + var(--sat)) 1.5rem calc(3.5rem + var(--sab)) 1.5rem;
+    opacity: 0; pointer-events: none;
+    -webkit-transition: opacity 0.7s ease;
+    transition: opacity 0.7s ease;
+    z-index: 1; text-align: center;
+    /* Prevent overscroll bounce on scenes */
+    overflow: hidden;
+  }
+  .scene.active { opacity: 1; pointer-events: all; }
+
+  h1 {
+    font-family: 'Playfair Display', serif;
+    /* Slightly larger floor for small iPhones */
+    font-size: clamp(1.5rem, 5vw, 3rem);
+    line-height: 1.3; margin-bottom: 0.8rem;
+    color: var(--rose-light);
+  }
+  h1 em { font-style: italic; color: var(--gold); }
+
+  p.sub {
+    font-size: clamp(0.9rem, 3.5vw, 1.1rem);
+    line-height: 1.75; max-width: 480px;
+    color: #d4b8c0; margin-bottom: 1.5rem;
+  }
+  p.sub em { font-style: italic; color: var(--rose-light); }
+
+  /* ---- PRIMARY BUTTON ---- */
+  .btn {
+    background: var(--rose); color: white; border: none;
+    /* Min 44px height = Apple HIG minimum tap target */
+    padding: .85rem 2.2rem; font-size: 1rem;
+    font-family: 'Lato', sans-serif; border-radius: 50px; cursor: pointer;
+    letter-spacing: .05em;
+    box-shadow: 0 4px 20px rgba(232,99,122,.4);
+    -webkit-transition: transform .2s, box-shadow .2s, background .2s;
+    transition: transform .2s, box-shadow .2s, background .2s;
+    -webkit-user-select: none;
+    user-select: none;
+    /* Remove iOS default button styling */
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  .btn:active {
+    transform: scale(0.97);
+    background: var(--rose-dark);
+  }
+
+  /* ---- ILLUSTRATION ---- */
+  .illustration { margin-bottom: 1.2rem; }
+
+  /* hero heart */
+  .hero-heart { position:relative; display:inline-block; animation:heartbeat 1.4s ease-in-out infinite; }
+  @keyframes heartbeat {
+    0%,100%{transform:scale(1)} 14%{transform:scale(1.15)} 28%{transform:scale(1)} 42%{transform:scale(1.1)} 56%{transform:scale(1)}
+  }
+  .hero-heart-glow {
+    position:absolute; inset:-18px; border-radius:50%;
+    background:radial-gradient(circle,rgba(232,99,122,.45) 0%,transparent 70%);
+    animation:glow-pulse 1.4s ease-in-out infinite; pointer-events:none;
+  }
+  @keyframes glow-pulse { 0%,100%{opacity:.5;transform:scale(1)} 42%{opacity:1;transform:scale(1.2)} }
+
+  /* floating hearts */
+  .hearts { position:relative; height:110px; width:200px; }
+  .heart-float {
+    position:absolute; font-size:1.5rem;
+    animation:float-up var(--d,4s) ease-in-out infinite var(--delay,0s); bottom:0;
+  }
+  @keyframes float-up {
+    0%{transform:translateY(0) scale(.8);opacity:0} 20%{opacity:1} 100%{transform:translateY(-105px) scale(1.1);opacity:0}
+  }
+
+  /* characters */
+  .characters { display:-webkit-flex; display:flex; gap:2rem; -webkit-align-items:flex-end; align-items:flex-end; margin-bottom:.8rem; }
+  .character  { display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; -webkit-align-items:center; align-items:center; gap:6px; }
+  .char-body  { animation:sway 2.5s ease-in-out infinite; transform-origin:bottom center; }
+  @keyframes sway { 0%,100%{transform:rotate(-3deg)} 50%{transform:rotate(3deg)} }
+  .char-label { font-size:.75rem; color:var(--rose-light); letter-spacing:.05em; }
+  .arrow-love { font-size:1.6rem; animation:pulse-heart 1s ease-in-out infinite; margin-bottom:14px; }
+  @keyframes pulse-heart { 0%,100%{transform:scale(1)} 50%{transform:scale(1.3)} }
+
+  /* chat bubbles */
+  .chat { display:-webkit-flex; display:flex; -webkit-flex-direction:column; flex-direction:column; gap:10px; max-width:300px; }
+  .bubble {
+    padding:.6rem 1rem; border-radius:18px; font-size:.9rem;
+    max-width:75%; opacity:0; animation:pop-in .4s ease forwards;
+  }
+  .bubble.them { background:#2a2a4a; border-bottom-left-radius:4px; -webkit-align-self:flex-start; align-self:flex-start; color:#d4b8c0; }
+  .bubble.me   { background:var(--rose); border-bottom-right-radius:4px; -webkit-align-self:flex-end; align-self:flex-end; color:white; }
+  @keyframes pop-in { from{transform:scale(.7);opacity:0} to{transform:scale(1);opacity:1} }
+  .bubble:nth-child(1){animation-delay:.3s} .bubble:nth-child(2){animation-delay:.9s}
+  .bubble:nth-child(3){animation-delay:1.5s} .bubble:nth-child(4){animation-delay:2.1s}
+
+  /* ring */
+  .ring-wrap { position:relative; display:inline-block; animation:levitate 3s ease-in-out infinite; }
+  @keyframes levitate { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-14px)} }
+  .ring-glow {
+    position:absolute; inset:-12px; border-radius:50%;
+    background:radial-gradient(circle,rgba(247,201,72,.5) 0%,transparent 70%);
+    animation:glow-ring 2s ease-in-out infinite;
+  }
+  @keyframes glow-ring { 0%,100%{opacity:.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.15)} }
+
+  /* yes/no */
+  .answer-buttons { display:-webkit-flex; display:flex; gap:1.2rem; margin-top:1.2rem; -webkit-flex-wrap:wrap; flex-wrap:wrap; -webkit-justify-content:center; justify-content:center; }
+  .btn-yes {
+    background:var(--rose); color:white; border:none;
+    padding:.9rem 2.4rem; font-size:1.1rem; font-family:'Lato',sans-serif;
+    border-radius:50px; cursor:pointer;
+    box-shadow:0 4px 20px rgba(232,99,122,.4);
+    -webkit-transition:transform .2s,box-shadow .2s;
+    transition:transform .2s,box-shadow .2s;
+    -webkit-appearance:none; appearance:none;
+    -webkit-user-select:none; user-select:none;
+    min-height: 44px;
+  }
+  .btn-yes:active { transform:scale(1.06); box-shadow:0 8px 28px rgba(232,99,122,.6); }
+  .btn-no {
+    background:transparent; color:#9a8090; border:2px solid #4a3040;
+    padding:.9rem 2rem; font-size:1rem; font-family:'Lato',sans-serif;
+    border-radius:50px; cursor:pointer;
+    -webkit-transition:transform .2s,border-color .2s,color .2s;
+    transition:transform .2s,border-color .2s,color .2s;
+    position:relative;
+    -webkit-appearance:none; appearance:none;
+    -webkit-user-select:none; user-select:none;
+    min-height: 44px;
+  }
+
+  /* gratitude icon */
+  .gratitude-icon { font-size:3rem; margin-bottom:1rem; animation:sway-slow 4s ease-in-out infinite; }
+  @keyframes sway-slow { 0%,100%{transform:rotate(-4deg) scale(1)} 50%{transform:rotate(4deg) scale(1.07)} }
+
+  /* bloom heart scene */
+  .bloom-hint { font-size:.85rem; color:#9a7080; letter-spacing:.08em; text-transform:uppercase; margin-bottom:1rem; animation:blink-hint 1.5s ease-in-out infinite; }
+  @keyframes blink-hint { 0%,100%{opacity:1} 50%{opacity:.35} }
+  .bloom-heart-svg {
+    cursor:pointer;
+    -webkit-transition:transform .15s; transition:transform .15s;
+    filter:drop-shadow(0 0 18px rgba(232,99,122,.5));
+    -webkit-filter:drop-shadow(0 0 18px rgba(232,99,122,.5));
+    animation:beat-big 1.6s ease-in-out infinite;
+    /* Make tap target bigger on iOS */
+    touch-action: manipulation;
+  }
+  .bloom-heart-svg:active { transform:scale(1.08); }
+  @keyframes beat-big {
+    0%,100%{transform:scale(1)} 14%{transform:scale(1.12)} 28%{transform:scale(1)} 42%{transform:scale(1.08)} 56%{transform:scale(1)}
+  }
+  .petal { position:absolute; font-size:1.2rem; pointer-events:none; opacity:0; animation:orbit var(--od,6s) linear infinite var(--odelay,0s); }
+  @keyframes orbit {
+    0%{opacity:0;transform:rotate(var(--start,0deg)) translateX(70px) scale(.7)}
+    10%{opacity:1} 90%{opacity:1}
+    100%{opacity:0;transform:rotate(calc(var(--start,0deg) + 360deg)) translateX(70px) scale(1)}
+  }
+  .petal-wrap { position:relative; display:inline-block; }
+
+  /* te amo reveal */
+  #te-amo-reveal { display:none; -webkit-flex-direction:column; flex-direction:column; -webkit-align-items:center; align-items:center; gap:.5rem; }
+  #te-amo-reveal.visible { display:-webkit-flex; display:flex; }
+  .te-amo-text {
+    font-family:'Playfair Display',serif;
+    font-size:clamp(2.6rem,10vw,5rem);
+    font-style:italic; color:var(--rose-light);
+    opacity:0; transform:scale(.4);
+    -webkit-transition:opacity .6s ease,transform .6s cubic-bezier(.17,.67,.4,1.4);
+    transition:opacity .6s ease,transform .6s cubic-bezier(.17,.67,.4,1.4);
+    line-height:1;
+  }
+  .te-amo-text.shown { opacity:1; transform:scale(1); }
+  .te-amo-sub { font-size:.95rem; color:#9a7080; opacity:0; -webkit-transition:opacity .5s ease .5s; transition:opacity .5s ease .5s; }
+  .te-amo-sub.shown { opacity:1; }
+  #btn-proximo { margin-top:1.2rem; opacity:0; pointer-events:none; -webkit-transition:opacity .5s ease .8s; transition:opacity .5s ease .8s; }
+  #btn-proximo.shown { opacity:1; pointer-events:all; }
+
+  /* confetti */
+  .confetti-piece {
+    position:fixed; border-radius:2px; opacity:0;
+    animation:fall var(--d,3s) ease-in var(--delay,0s) forwards; z-index:99;
+    pointer-events:none;
+  }
+  @keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);opacity:1} 100%{transform:translateY(100vh) rotate(720deg);opacity:0} }
+
+  /* progress dots */
+  #progress {
+    position: fixed;
+    bottom: calc(14px + var(--sab));
+    left: 50%; transform: translateX(-50%);
+    display: -webkit-flex;
+    display: flex;
+    gap: 7px; z-index: 10;
+  }
+  .dot { width:7px; height:7px; border-radius:50%; background:#4a3040; -webkit-transition:background .4s,transform .4s; transition:background .4s,transform .4s; }
+  .dot.done { background:var(--rose); transform:scale(1.3); }
+
+  /* final */
+  .final-hearts { font-size:2.8rem; animation:explode .6s ease-out forwards; margin-bottom:.8rem; }
+  @keyframes explode { 0%{transform:scale(0);opacity:0} 60%{transform:scale(1.3)} 100%{transform:scale(1);opacity:1} }
+
+  /* iOS: disable callout on long press */
+  img, svg { -webkit-user-drag: none; -webkit-touch-callout: none; }
+
+  @media (prefers-reduced-motion:reduce) { *,*::before,*::after{animation-duration:.01ms !important;-webkit-animation-duration:.01ms !important} }
+
+  /* Small iPhones (SE etc) */
+  @media (max-height: 668px) {
+    .illustration { margin-bottom:.7rem; }
+    h1 { font-size: clamp(1.3rem, 4.5vw, 2.2rem); margin-bottom:.5rem; }
+    p.sub { font-size:.85rem; margin-bottom:1rem; line-height:1.6; }
+    .hearts { height:80px; }
+    @keyframes float-up { 100%{transform:translateY(-75px) scale(1.1);opacity:0} }
+    .gratitude-icon { font-size:2.2rem; }
+    .final-hearts { font-size:2rem; }
+  }
+</style>
+</head>
+<body>
+
+<div id="stars"></div>
+
+<!-- Back button -->
+<button id="btn-back" onclick="goBack()">
+  <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+  voltar
+</button>
+
+<!-- Progress dots: 9 steps -->
+<div id="progress">
+  <div class="dot" id="d0"></div>
+  <div class="dot" id="d1"></div>
+  <div class="dot" id="d2"></div>
+  <div class="dot" id="d3"></div>
+  <div class="dot" id="d4"></div>
+  <div class="dot" id="d5"></div>
+  <div class="dot" id="d6"></div>
+  <div class="dot" id="d7"></div>
+  <div class="dot" id="d8"></div>
+</div>
+
+<!-- ========== SCENE 0 ========== -->
+<div class="scene active" id="scene-0">
+  <div class="illustration hero-heart">
+    <div class="hero-heart-glow"></div>
+    <svg width="100" height="92" viewBox="0 0 110 100">
+      <path d="M55 90C55 90 8 58 8 30C8 14 20 5 35 5C44 5 52 10 55 16C58 10 66 5 75 5C90 5 102 14 102 30C102 58 55 90 55 90Z" fill="url(#hg0)"/>
+      <defs>
+        <radialGradient id="hg0" cx="50%" cy="40%" r="60%">
+          <stop offset="0%" stop-color="#f9a8b8"/>
+          <stop offset="60%" stop-color="#e8637a"/>
+          <stop offset="100%" stop-color="#b03050"/>
+        </radialGradient>
+      </defs>
+      <ellipse cx="38" cy="28" rx="9" ry="5" fill="white" opacity=".25" transform="rotate(-30 38 28)"/>
+    </svg>
+  </div>
+  <h1>Ei, Taiane…<br><em>tem uma história</em><br>que preciso te contar.</h1>
+  <p class="sub">Uma história que começou numa tela, mas que é mais real do que qualquer coisa que eu já senti.</p>
+  <button class="btn" onclick="goTo(1)">Quero ouvir ✨</button>
+</div>
+
+<!-- ========== SCENE 1 ========== -->
+<div class="scene" id="scene-1">
+  <div class="illustration">
+    <div class="chat">
+      <div class="bubble them">oi 👋</div>
+      <div class="bubble me">oi! quem é você? 😊</div>
+      <div class="bubble them">alguém que queria te conhecer…</div>
+      <div class="bubble me">hm, me conta mais 🌸</div>
+    </div>
+  </div>
+  <h1>Tudo começou<br><em>pela internet</em></h1>
+  <p class="sub">Uma mensagem simples. Uma resposta. E de repente o tempo começou a passar diferente quando você estava do outro lado da tela.</p>
+  <button class="btn" onclick="goTo(2)">Continuar →</button>
+</div>
+
+<!-- ========== SCENE 2 ========== -->
+<div class="scene" id="scene-2">
+  <div class="illustration characters">
+    <div class="character">
+      <svg class="char-body" width="56" height="94" viewBox="0 0 60 100">
+        <circle cx="30" cy="18" r="14" fill="#e8637a"/>
+        <text x="30" y="24" text-anchor="middle" font-size="14">😊</text>
+        <rect x="18" y="33" width="24" height="38" rx="8" fill="#b03050"/>
+        <rect x="8"  y="35" width="12" height="28" rx="6" fill="#b03050"/>
+        <rect x="40" y="35" width="12" height="28" rx="6" fill="#b03050"/>
+        <rect x="17" y="68" width="11" height="30" rx="5" fill="#8a2040"/>
+        <rect x="32" y="68" width="11" height="30" rx="5" fill="#8a2040"/>
+      </svg>
+      <span class="char-label">Artur</span>
+    </div>
+    <div class="arrow-love">💕</div>
+    <div class="character">
+      <svg class="char-body" width="56" height="94" viewBox="0 0 60 100" style="-webkit-animation-direction:reverse;animation-direction:reverse">
+        <circle cx="30" cy="18" r="14" fill="#f7c948"/>
+        <text x="30" y="24" text-anchor="middle" font-size="14">🥰</text>
+        <rect x="15" y="33" width="30" height="38" rx="10" fill="#e8637a"/>
+        <rect x="6"  y="35" width="12" height="28" rx="6" fill="#e8637a"/>
+        <rect x="42" y="35" width="12" height="28" rx="6" fill="#e8637a"/>
+        <rect x="16" y="68" width="12" height="30" rx="5" fill="#b03050"/>
+        <rect x="32" y="68" width="12" height="30" rx="5" fill="#b03050"/>
+      </svg>
+      <span class="char-label">Taiane</span>
+    </div>
+  </div>
+  <h1>A distância<br>não impediu <em>nada</em></h1>
+  <p class="sub">Conversas que não tinham hora pra acabar. Risadas que atravessavam a tela. Você foi se tornando a parte favorita dos meus dias.</p>
+  <button class="btn" onclick="goTo(3)">E aí? →</button>
+</div>
+
+<!-- ========== SCENE 3 ========== -->
+<div class="scene" id="scene-3">
+  <div class="illustration">
+    <div class="hearts">
+      <span class="heart-float" style="left:10%;--d:3.2s;--delay:0s">💖</span>
+      <span class="heart-float" style="left:30%;--d:2.8s;--delay:.5s">💗</span>
+      <span class="heart-float" style="left:55%;--d:3.6s;--delay:1s">💓</span>
+      <span class="heart-float" style="left:75%;--d:2.5s;--delay:.3s">💝</span>
+      <span class="heart-float" style="left:90%;--d:3.0s;--delay:.8s">💕</span>
+    </div>
+  </div>
+  <h1>Aí eu percebi<br>que estava <em>apaixonado</em></h1>
+  <p class="sub">Não foi um momento só. Foi aos poucos, no jeito que você fala, que você ri, que você pensa. Foi sem perceber… e depois era tarde demais pra fingir que não sentia.</p>
+  <button class="btn" onclick="goTo(4)">Tem mais 🌹</button>
+</div>
+
+<!-- ========== SCENE 4: Gratitude ========== -->
+<div class="scene" id="scene-4">
+  <div class="gratitude-icon illustration">🤗</div>
+  <h1>Obrigado,<br><em>de verdade</em></h1>
+  <p class="sub">Sou muito grato a você e sua família por terem me adotado. Saiba antes de tudo que estou aqui para você. Sou seu companheiro, nas horas boas e principalmente nas difíceis.</p>
+  <button class="btn" onclick="goTo('scene-4b')">Continuar 💛</button>
+</div>
+
+<!-- ========== SCENE 4b: Words ========== -->
+<div class="scene" id="scene-4b">
+  <div class="illustration" style="font-size:2.6rem;animation:sway-slow 4s ease-in-out infinite">💬</div>
+  <h1>Antes de tudo,<br><em>preciso te dizer…</em></h1>
+  <p class="sub">Quando vi, estávamos conversando todos os dias. Me encantei logo com seu sorriso e prometi que devolveria ele a você. <em>Seu sotaque me cativou, só um cadim.</em></p>
+  <button class="btn" onclick="goTo(5)">Continuar 💕</button>
+</div>
+
+<!-- ========== SCENE 5: Bloom Heart ========== -->
+<div class="scene" id="scene-5">
+  <div id="bloom-before">
+    <p class="bloom-hint">Toque no coração 💗</p>
+    <div class="petal-wrap">
+      <span class="petal" style="--start:0deg;  --od:7s;  --odelay:0s">🌸</span>
+      <span class="petal" style="--start:51deg; --od:6s;  --odelay:.4s">🌺</span>
+      <span class="petal" style="--start:102deg;--od:8s;  --odelay:.8s">🌸</span>
+      <span class="petal" style="--start:153deg;--od:6.5s;--odelay:1.2s">🌹</span>
+      <span class="petal" style="--start:204deg;--od:7.5s;--odelay:.2s">🌸</span>
+      <span class="petal" style="--start:255deg;--od:6s;  --odelay:.6s">🌺</span>
+      <span class="petal" style="--start:306deg;--od:7s;  --odelay:1s">🌸</span>
+      <svg class="bloom-heart-svg" width="150" height="136" viewBox="0 0 110 100"
+           onclick="revealTeAmo()" ontouchend="revealTeAmo()">
+        <path d="M55 90C55 90 8 58 8 30C8 14 20 5 35 5C44 5 52 10 55 16C58 10 66 5 75 5C90 5 102 14 102 30C102 58 55 90 55 90Z" fill="url(#hg2)"/>
+        <defs>
+          <radialGradient id="hg2" cx="50%" cy="40%" r="60%">
+            <stop offset="0%"  stop-color="#f9a8b8"/>
+            <stop offset="60%" stop-color="#e8637a"/>
+            <stop offset="100%" stop-color="#b03050"/>
+          </radialGradient>
+        </defs>
+        <ellipse cx="38" cy="28" rx="9" ry="5" fill="white" opacity=".25" transform="rotate(-30 38 28)"/>
+      </svg>
+    </div>
+  </div>
+  <div id="te-amo-reveal">
+    <div class="te-amo-text" id="te-amo-word">eu te amo</div>
+    <div class="te-amo-sub"  id="te-amo-sub">…e sempre vou te amar. 💕</div>
+    <button class="btn" id="btn-proximo" onclick="goTo(6)">Continuar 🌹</button>
+  </div>
+</div>
+
+<!-- ========== SCENE 6: The question (LAST) ========== -->
+<div class="scene" id="scene-6">
+  <div class="illustration">
+    <div class="ring-wrap">
+      <div class="ring-glow"></div>
+      <svg width="110" height="110" viewBox="0 0 120 120">
+        <ellipse cx="60" cy="78" rx="32" ry="14" fill="none" stroke="#f7c948" stroke-width="8"/>
+        <polygon points="60,22 80,48 60,56 40,48" fill="#e8637a" opacity=".9"/>
+        <polygon points="60,22 80,48 60,36" fill="#f9a8b8"/>
+        <polygon points="60,22 40,48 60,36" fill="#c04060"/>
+        <circle cx="68" cy="32" r="4" fill="white" opacity=".6"/>
+      </svg>
+    </div>
+  </div>
+  <h1><em>Taiane,</em><br>você quer ser<br>minha namorada?</h1>
+  <div class="answer-buttons">
+    <button class="btn-yes" onclick="answerYes()">Sim! 💖</button>
+    <button class="btn-no" id="btn-no"
+      onmouseenter="runAway()"
+      ontouchstart="handleNoTouch(event)">Não 😅</button>
+  </div>
+</div>
+
+<!-- ========== SCENE FINAL ========== -->
+<div class="scene" id="scene-final">
+  <div class="final-hearts">🎉💕🥳💖✨</div>
+  <h1><em>Ela disse SIM!</em></h1>
+  <p class="sub" style="font-size:1rem;color:var(--rose-light);">
+    Prometo ser fiel a você, e estar junto nos momentos difíceis. Nossa história a partir de agora só está começando.
+  </p>
+  <p class="sub" style="font-size:1rem;color:var(--rose-light);margin-top:-.8rem;">
+    Que começo lindo esse nosso. Obrigado por existir, Taiane.<br>
+    Agora somos oficialmente <strong style="color:var(--gold)">nós dois</strong>. 💑
+  </p>
+  <p class="sub" style="font-size:.9rem;margin-top:0;color:#9a8090;">
+    Da internet até o infinito. 🌐→∞
+  </p>
+</div>
+
+<script>
+  /* ---- Stars ---- */
+  const starsEl = document.getElementById('stars');
+  for (let i=0;i<100;i++){
+    const s=document.createElement('div'); s.className='star';
+    const sz=Math.random()*2.5+.5;
+    s.style.cssText=`width:${sz}px;height:${sz}px;top:${Math.random()*100}%;left:${Math.random()*100}%;--d:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*4).toFixed(1)}s;`;
+    starsEl.appendChild(s);
+  }
+
+  /* ---- Scene order ---- */
+  const SCENE_ORDER = ['scene-0','scene-1','scene-2','scene-3','scene-4','scene-4b','scene-5','scene-6','scene-final'];
+  let currentIndex = 0;
+
+  function showScene(index) {
+    document.getElementById(SCENE_ORDER[currentIndex]).classList.remove('active');
+    const nextId = SCENE_ORDER[index];
+    document.getElementById(nextId).classList.add('active');
+    currentIndex = index;
+
+    for(let i=0;i<9;i++) document.getElementById('d'+i).classList.toggle('done', i<=index);
+
+    document.getElementById('btn-back').classList.toggle('visible', index > 0);
+
+    if (nextId === 'scene-5') resetBloom();
+    if (nextId === 'scene-6') { noMoves=0; resetNoBtn(); }
+    if (nextId === 'scene-final') launchConfetti();
+  }
+
+  function goTo(n) {
+    const key = (typeof n === 'string' && n.startsWith('scene-')) ? n : 'scene-'+n;
+    const idx = SCENE_ORDER.indexOf(key);
+    if (idx !== -1) showScene(idx);
+  }
+
+  function goBack() { if(currentIndex>0) showScene(currentIndex-1); }
+  function answerYes() { showScene(8); }
+
+  /* ---- Runaway No — works for both mouse and touch on iOS ---- */
+  let noMoves = 0;
+  let noTouchHandled = false;
+
+  function resetNoBtn(){
+    const btn=document.getElementById('btn-no');
+    btn.style.transform=''; btn.style.opacity='1'; btn.style.pointerEvents='';
+    noTouchHandled = false;
+  }
+
+  function handleNoTouch(e) {
+    e.preventDefault(); // prevent ghost click on iOS
+    if (!noTouchHandled) { noTouchHandled = false; runAway(); }
+  }
+
+  function runAway() {
+    noMoves++;
+    const btn=document.getElementById('btn-no');
+    const scene=document.getElementById('scene-6');
+    const sr=scene.getBoundingClientRect(), br=btn.getBoundingClientRect();
+    const maxX=sr.width-br.width-30, maxY=sr.height-br.height-80;
+    btn.style.transform=`translate(${Math.random()*maxX-maxX/2}px,${Math.random()*maxY-maxY/2}px)`;
+    btn.style.transition='transform .35s cubic-bezier(.17,.67,.83,.67)';
+    if(noMoves>=4){btn.style.opacity='0';btn.style.pointerEvents='none';}
+  }
+
+  /* ---- Bloom reveal ---- */
+  let bloomRevealed = false;
+  function revealTeAmo(e){
+    if (e) e.preventDefault();
+    if (bloomRevealed) return;
+    bloomRevealed = true;
+    document.getElementById('bloom-before').style.display='none';
+    const r=document.getElementById('te-amo-reveal'); r.classList.add('visible');
+    setTimeout(()=>{
+      document.getElementById('te-amo-word').classList.add('shown');
+      document.getElementById('te-amo-sub').classList.add('shown');
+      document.getElementById('btn-proximo').classList.add('shown');
+    },80);
+    burstHearts();
+  }
+
+  function burstHearts(){
+    const em=['💕','💖','💗','✨','🌸'];
+    for(let i=0;i<18;i++){
+      const el=document.createElement('div');
+      el.style.cssText=`position:fixed;left:${20+Math.random()*60}vw;top:${20+Math.random()*50}vh;font-size:${1+Math.random()*1.5}rem;pointer-events:none;z-index:100;opacity:1;-webkit-transition:transform 1.2s ease,opacity 1.2s ease;transition:transform 1.2s ease,opacity 1.2s ease;`;
+      el.textContent=em[Math.floor(Math.random()*em.length)];
+      document.body.appendChild(el);
+      setTimeout(()=>{ el.style.transform=`translate(${(Math.random()-.5)*140}px,${-50-Math.random()*90}px)`; el.style.opacity='0'; },50+i*40);
+      setTimeout(()=>el.remove(),1500+i*40);
+    }
+  }
+
+  function resetBloom(){
+    bloomRevealed = false;
+    document.getElementById('bloom-before').style.display='';
+    const r=document.getElementById('te-amo-reveal'); r.classList.remove('visible');
+    document.getElementById('te-amo-word').classList.remove('shown');
+    document.getElementById('te-amo-sub').classList.remove('shown');
+    document.getElementById('btn-proximo').classList.remove('shown');
+  }
+
+  /* ---- Confetti ---- */
+  function launchConfetti(){
+    const colors=['#e8637a','#f7c948','#a8d8ea','#ffffff','#f9a8b8','#b03050'];
+    for(let i=0;i<70;i++){
+      const c=document.createElement('div'); c.className='confetti-piece';
+      c.style.cssText=`left:${Math.random()*100}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};border-radius:${Math.random()>.5?'50%':'2px'};width:${Math.random()*10+5}px;height:${Math.random()*10+5}px;--d:${(Math.random()*3+2).toFixed(1)}s;--delay:${(Math.random()*2).toFixed(1)}s;`;
+      document.body.appendChild(c);
+      setTimeout(()=>c.remove(),6000);
+    }
+  }
+
+  // Prevent iOS rubber-band scroll
+  document.addEventListener('touchmove', e => e.preventDefault(), { passive: false });
+
+  // Init
+  document.getElementById('d0').classList.add('done');
+</script>
+</body>
+</html>
